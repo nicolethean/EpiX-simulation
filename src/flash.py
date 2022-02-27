@@ -64,6 +64,7 @@ def flagPixels(lum_old, lum_curr):
             flagged[i][j] = flagChange(lum_old[i][j], lum_curr[i][j])
     return flagged
 
+
 # updates values of flag history, recent flag and filters img:
 # recent flag is a matrix that represents the most recent change (bright, dark, neither) for each pixel
 # flag_history stores how many frames it has been since the most recent change for each pixel

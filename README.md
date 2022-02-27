@@ -3,7 +3,7 @@ Authors:
 Nicole Thean  (nicole@thean.com)
 Jeff Zhou  (jffzhou@gmail.com)
 
-Health Hackathon 2022
+Health Hackathon 2022 Finalist
 Model for prototype for epilepsy-triggering events on desktop. 
 
 Other Team Members:
