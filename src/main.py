@@ -145,8 +145,7 @@ def flagPixels(lum_old, lum_curr):
 #  - if a change is recorded from bright to dark then filter out that pixel
 #  - if the flag_history for a pixel is greater than the frame rate then the most recent change is no change
 
-
-# filtered_pixels is a matrix that is 0 if a pixel is filtered and 1 if a pixel is not filtereddef sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
+# d filtered_pixels is a matrix that is 0 if a pixel is filtered and 1 if a pixel is not filteredef sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
     for i in range(most_recent_flag.shape[0]):
         for j in range(most_recent_flag.shape[1]):
             # print("flag hist:")
@@ -170,15 +169,15 @@ def flagPixels(lum_old, lum_curr):
                 # current change equal to most recent change
                 flag_history[i][j] = 0
             # either 0 and 1 or 0 and -1
-            elif (curr_flag[i][i] === curr_flag[i][j]1 or curr_flag[i][i] == -1):
+            elif (curr_flag[i][i] == 1 or curr_flag[i][i] == -1):
                 flag_history[i][j] = 0
-                most_recent_flag[i][j]
-                filtered_pixels[i][j] = 0 = curr_flag[i][j]
+                most_recent_flag[i][j] = curr_flag[i][j]
+                filtered_pixels[i][j] = 0
             # either 1 and 0 or -1 and 0
             elif (flag_history[i][j] < FRAME_CONST):
-                # increment most recent ge
+                # increment most recent change
                 flag_history[i][j] = flag_history[i][j]
-                filtered_pixels[i][j] = 0 + 1
+                filtered_pixels[i][j] = 0
             else:
                 # most recent change was > 1 second ago
                 most_recent_flag[i][j] = 0
@@ -187,11 +186,10 @@ def flagPixels(lum_old, lum_curr):
                 filtered_pixels[i][j] = 0
     return (flag_history, most_recent_flag, img)
 
-
-\    filtered_pixels[i][j] = 0def execute():
-        # datetData1()
+    def execute():
+        # data = mini_data()
+    data = getData1()
     print(data)
-    sys.exit()
     filtered_imgs = [data[0], data[1]]
     filtered_pixels = filtered_imgs
     flag_hist = np.zeros((data[0].shape[0], data[0].shape[1]))
@@ -201,20 +199,18 @@ def flagPixels(lum_old, lum_curr):
     recent = flag12
     # print("DATA 0:")
     # print(data[0])
-    # print(data[1])getNewLum(lum_arr1, st, rece, filtered_pixels)
+    # print(data[1])
 
     for img_data in data[2:]:
-        lum_arr1 = lum_arr2
+        lum_arr1 = getNewLum(lum_arr1, st, rece, filtered_pixels)
         lum_arr2 = rgb2luminanceArr(img_data)
-        flag12 = s)
-        (flag_hist, recent, imgOut, filtered_pixels)=sift(
-            flag_higetNewLum(lum_arr1, st, rece, filtered_pixels)nt, flag12, img_data, filtered_pixels)
+        flag12 = flagPixels(lum_arr1, lum_arr2)
+        (flag_hist, recent, imgOut, filtered_pixels) = sift(
+            flag_hist, flag12, img_data, filtered_pixels)
         # print("DATA 0:")
         # print(data[0])
         # print(data[1])
         filtered_imgs.append(imgOut)
 
-        # print("IMG OUT:")
-        # print(imgOut)e(np.uint8)
-print("split")
-#
+       # print("IMG OUT:")
+        # print(imgOut)
