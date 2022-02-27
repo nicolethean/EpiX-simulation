@@ -11,7 +11,7 @@ import os
 
 
 FRAME_CONST = 60
-HOLD_CONST = 20
+HOLD_CONST = 5
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -129,7 +129,7 @@ def sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
 
 
 def filter(pix):
-    return (120, 120, 120)
+    return (0.5, 0.5, 0.5)
     # return (120, 120, 120)
 
 
@@ -164,9 +164,9 @@ def mini_data():
     for i in range(len(colors)):
         data.append(np.full((n, n, 3), colors[i]))
 
-    print(type(data))
-    print(type(data[1]))
-    print(data[6])
+    # print(type(data))
+    # print(type(data[1]))
+    # print(data[6])
     # data[6][1][1] = WHITE
 
     return data
@@ -187,7 +187,7 @@ def getData1():
         if (filename.endswith(".png")):
             data.append(mpimg.imread(filename))
 
-    return data[:19]
+    return data
 
 
 def execute():
@@ -221,13 +221,15 @@ def execute():
         # print("IMG OUT:")
         # print(imgOut)
 
-    # for fi in filtered_imgs:
-    #     alt = fi.astype(np.uint8)
-        # print("split")
-        # print(alt)
-        # print(alt.shape)
-        # img = Image.fromarray(alt)
-        # img.show()
+    for f in filtered_imgs:
+        f = (f * 255).astype(np.uint8)
+
+        # f.astype(np.uint8)
+    # print("split")
+    # print(alt)
+    # print(alt.shape)
+    # img = Image.fromarray(alt)
+    # img.show()
 
     print("done!")
     animate_filtered(filtered_imgs)
@@ -260,7 +262,7 @@ def animate_filtered(filtered_imgs):
     ani = animation.ArtistAnimation(fig, frames, interval=1, blit=True,
                                     repeat_delay=1000)
 
-    ani.save('testfilter.fps', fps=60)
+    ani.save('testfilter.gif', fps=60)
     plt.axis('off')
     # fig.set_size_inches(filtered_imgs[0].shape)
     plt.show()
