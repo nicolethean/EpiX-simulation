@@ -111,7 +111,7 @@ def sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
                     # current change equal to most recent change
                     flag_history[i][j] = 0
                 # either 0 and 1 or 0 and -1
-                elif (curr_flag[i][i] == 1 or curr_flag[i][i] == -1):
+                elif (curr_flag[i][j] == 1 or curr_flag[i][j] == -1):
                     filtered_pixels[i][j] = 0
                     flag_history[i][j] = 0
                     most_recent_flag[i][j] = curr_flag[i][j]
