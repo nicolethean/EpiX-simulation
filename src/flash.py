@@ -7,10 +7,16 @@ from PIL import Image
 # from videofig import videofig
 import matplotlib.cm as cm
 import os
+# import moviepy.editor as mp
 
 
 FRAME_CONST = 60
-HOLD_CONST = 30
+HOLD_CONST = 5
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 
 # converts rgb tuples into luminance value
@@ -80,7 +86,7 @@ def sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
             # print(flag_history[i][j])
             # either 1 and -1 or -1 and 1
             if filtered_pixels[i][j] > 0:
-                if (curr_flag[i][j] * most_recent_flag[i][j] == -1) or (filtered_pixels[i][j] > FRAME_CONST):
+                if (filtered_pixels[i][j] > HOLD_CONST):
                     filtered_pixels[i][j] = 0
                     most_recent_flag[i][j] = curr_flag[i][j]
                 else:
@@ -105,7 +111,7 @@ def sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
                     # current change equal to most recent change
                     flag_history[i][j] = 0
                 # either 0 and 1 or 0 and -1
-                elif (curr_flag[i][i] == 1 or curr_flag[i][i] == -1):
+                elif (curr_flag[i][j] == 1 or curr_flag[i][j] == -1):
                     filtered_pixels[i][j] = 0
                     flag_history[i][j] = 0
                     most_recent_flag[i][j] = curr_flag[i][j]
@@ -123,7 +129,8 @@ def sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
 
 
 def filter(pix):
-    return (255, 0, 0)
+    return (0.5, 0.5, 0.5)
+    # return (120, 120, 120)
 
 
 def mini_data():
@@ -135,11 +142,6 @@ def mini_data():
 
     # data = [mpimg.imread("color-black.png"), mpimg.imread("color-white.png"), mpimg.imread("color-black.png")]
 
-    black = (0, 0, 0)
-    white = (255, 255, 255)
-    red = (255, 0, 0)
-    green = (0, 255, 0)
-    blue = (0, 0, 255)
     n = 3
 
     # i1 = np.full((3, 3, 3), (0., 0., 0.))
@@ -150,17 +152,22 @@ def mini_data():
     # b_strip = [i1.copy()] * 3
     # alternate = [i2.copy()] * 2
     # b_strip2 = [i1.copy()] * 3
-    colors = [black, black, black, black, white, white, black, black]
+    colors = [BLACK, BLACK, BLACK, BLACK, WHITE, WHITE,
+              BLACK, BLACK, WHITE, WHITE, WHITE, WHITE,
+              BLACK, BLACK, BLACK, BLACK, WHITE, WHITE,
+              BLACK, BLACK, BLACK, BLACK, WHITE, WHITE,
+              BLACK, BLACK, BLACK, BLACK, WHITE, WHITE,
+              BLACK, BLACK, BLACK, BLACK, WHITE, WHITE, ]
 
     data = []
 
     for i in range(len(colors)):
         data.append(np.full((n, n, 3), colors[i]))
 
-    print(type(data))
-    print(type(data[1]))
-    print(data[6])
-    data[6][1][1] = white
+    # print(type(data))
+    # print(type(data[1]))
+    # print(data[6])
+    # data[6][1][1] = WHITE
 
     return data
 
@@ -180,12 +187,12 @@ def getData1():
         if (filename.endswith(".png")):
             data.append(mpimg.imread(filename))
 
-    return data[:19]
+    return data
 
 
 def execute():
-    data = mini_data()
-    # data = getData1()
+    # data = mini_data()
+    data = getData1()
     # print(data)
     animate_non(data)
     # sys.exit()
@@ -211,16 +218,18 @@ def execute():
         # print(data[0])
         # print(data[1])
         filtered_imgs.append(imgOut)
-        print("IMG OUT:")
-        print(imgOut)
+        # print("IMG OUT:")
+        # print(imgOut)
 
-    # for fi in filtered_imgs:
-    #     alt = fi.astype(np.uint8)
-        # print("split")
-        # print(alt)
-        # print(alt.shape)
-        # img = Image.fromarray(alt)
-        # img.show()
+    for f in filtered_imgs:
+        f = (f * 255).astype(np.uint8)
+
+        # f.astype(np.uint8)
+    # print("split")
+    # print(alt)
+    # print(alt.shape)
+    # img = Image.fromarray(alt)
+    # img.show()
 
     print("done!")
     animate_filtered(filtered_imgs)
@@ -237,7 +246,7 @@ def animate_non(imgs):
                                     repeat_delay=1000)
 
     # ani.save("test1non.gif", writer="me", fps=60)
-    ani.save('testnon.gif')
+    ani.save('testnon.gif', fps=60)
     plt.axis('off')
     # fig.set_size_inches(filtered_imgs[0].shape)
     plt.show()
@@ -253,7 +262,7 @@ def animate_filtered(filtered_imgs):
     ani = animation.ArtistAnimation(fig, frames, interval=1, blit=True,
                                     repeat_delay=1000)
 
-    ani.save('testfilter.gif')
+    ani.save('testfilter.gif', fps=60)
     plt.axis('off')
     # fig.set_size_inches(filtered_imgs[0].shape)
     plt.show()

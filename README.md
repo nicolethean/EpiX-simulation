@@ -23,3 +23,11 @@ After the first detection of a flashing pixel, that pixel is kept at constant co
 
 The sequence of inputed images are first animated without filtering.
 The filtered images are also animated after the program finishes.
+
+//////////////////////////////////////////////////////////////////////////////
+Usage:
+
+Data is currently read in the src folder. This can be changed based on image pathways. The data must be in sequential order of frames. To use demo data, move images from a test# folder in /data. 
+
+To run demo simulation in termainal: 
+      python flash.py
