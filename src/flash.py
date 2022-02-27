@@ -15,6 +15,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+FILTER_COLOR = (0.5, 0.5, 0.5)
 
 
 # converts rgb tuples into luminance value
@@ -111,7 +112,7 @@ def sift(flag_history, most_recent_flag, curr_flag, img, filtered_pixels):
 
 
 def filter(pix):
-    return (0.5, 0.5, 0.5)
+    return FILTER_COLOR
 
 
 def mini_data():
