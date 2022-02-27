@@ -4,7 +4,10 @@ import matplotlib.image as mpimg
 import matplotlib.animation as animation
 import sys
 from PIL import Image
-from videofig import videofig
+# from videofig import videofig
+import matplotlib.cm as cm
+import os
+
 
 FRAME_CONST = 60
 
@@ -36,6 +39,8 @@ def rgb2luminanceArr(rgbArr):
 
 # l2 is pixel's current luminosity and l1 is pixel's previous luminosity in previous fram
 # returns 1 if change is very bright, -1 if change is too dark and 0 if no significant change
+
+
 def flagChange(l1, l2):
     if ((l2-l1 > 20) and (l1 < 160)):
         return 1
@@ -60,8 +65,7 @@ def flagPixels(lum_old, lum_curr):
 #  - if the flag_history for a pixel is greater than the frame rate then the most recent change is no change
 
 
-def sift(flag_history, most_recent_flag, curr_flag, img, data0):
-    img2 = img
+def sift(flag_history, most_recent_flag, curr_flag, img):
     for i in range(most_recent_flag.shape[0]):
         for j in range(most_recent_flag.shape[1]):
             # print("flag hist:")
@@ -70,12 +74,13 @@ def sift(flag_history, most_recent_flag, curr_flag, img, data0):
             if (curr_flag[i][j] * most_recent_flag[i][j] == -1):
                 # need to filter
                 # print("SIFT: FIRST IF")
-                # print(data0)
+                # # print(data0)
                 most_recent_flag[i][j] = curr_flag[i][j]
-                img2[i][j] = filter(img[i][j])
+                img[i][j] = filter(img[i][j])
                 # print("SIFT: FIRST IF, SECOND ")
                 # print(data0)
                 flag_history[i][j] = 0
+                # filtered_pixels[i][j] = 0
                 # print("SIFT: FIRST IF, THIRD ")
                 # print(data0)
             # either 1 and 1 or -1 and -1
@@ -96,7 +101,7 @@ def sift(flag_history, most_recent_flag, curr_flag, img, data0):
                 most_recent_flag[i][j] = 0
                 flag_history[i][j] = 0
 
-    return (flag_history, most_recent_flag, img2)
+    return (flag_history, most_recent_flag, img)
 
 
 def filter(pix):
@@ -111,30 +116,63 @@ def mini_data():
     # set = b_strip + alternate + b_strip
 
     # data = [mpimg.imread("color-black.png"), mpimg.imread("color-white.png"), mpimg.imread("color-black.png")]
-    i1 = np.full((3, 3, 3), (0., 0., 0.))
-    i2 = [np.full((3, 3, 3), (0., 0., 0.)), np.full((3, 3, 3), (0., 0., 0.))]
-    i3 = np.full((3, 3, 3), (1., 1., 1.))
-    black_img2 = np.full((3, 3, 3), (0., 0., 0.))
 
-    black = ()
+    black = (0., 0., 0.)
+    white = (1., 1., 1.)
+    red = (1., 0., 0.)
+    green = (0., 1., 0.)
+    blue = (0., 0., 1.)
+    n = 3
 
-    b_strip = [i1.copy()] * 3
-    alternate = [i2.copy()] * 2
-    b_strip2 = [i1.copy()] * 3
+    # i1 = np.full((3, 3, 3), (0., 0., 0.))
+    # i2 = [np.full((3, 3, 3), (0., 0., 0.)), np.full((3, 3, 3), (0., 0., 0.))]
+    # i3 = np.full((3, 3, 3), (1., 1., 1.))
+    # black_img2 = np.full((3, 3, 3), (0., 0., 0.))
 
-    return [np.full((3, 3, 3), (0., 0., 0.)), np.full((3, 3, 3), (0., 0., 0.)),
-            np.full((3, 3, 3), (0., 0., 0.)),
-            np.full((3, 3, 3), (1., 1., 1.)), np.full((3, 3, 3), (0., 0., 0.)),
-            np.full((3, 3, 3), (1., 1., 1.)), np.full((3, 3, 3), (0., 0., 0.)),
-            np.full((3, 3, 3), (0., 0., 0.)), np.full((3, 3, 3), (0., 0., 0.)),
-            np.full((3, 3, 3), (0., 0., 0.))]
+    # b_strip = [i1.copy()] * 3
+    # alternate = [i2.copy()] * 2
+    # b_strip2 = [i1.copy()] * 3
+    colors = [black, black, black, black, white, white, black, black]
+
+    data = []
+
+    for i in range(len(colors)):
+        data.append(np.full((n, n, 3), colors[i]))
+
+    print(type(data))
+    print(type(data[1]))
+    print(data[6])
+    data[6][1][1] = white
+
+    return data
+
+
+def getData1():
+    # folder_dir = "/Users/nicole/hack-22/data/test1"
+    data = []
+    # for images in os.listdir(folder_dir):
+
+    #     # check if the image ends with png
+    #     if (images.endswith(".jpg")):
+    #         data.append(mpimg.imread(images))
+
+    directory = '/Users/nicole/hack-22/src'
+    # data = []
+    for filename in os.listdir(directory):
+        if (filename.endswith(".png")):
+            data.append(mpimg.imread(filename))
+
+    return data[:19]
 
 
 def execute():
-    data = mini_data()
+    # data = mini_data()
+    data = getData1()
     # print(data)
+    animate_non(data)
     # sys.exit()
     filtered_imgs = [data[0], data[1]]
+    filtered_pixels = np.zeros((data[0].shape[0], data[0].shape[1]))
     flag_hist = np.zeros((data[0].shape[0], data[0].shape[1]))
     lum_arr1 = rgb2luminanceArr(data[0])
     lum_arr2 = rgb2luminanceArr(data[1])
@@ -145,11 +183,12 @@ def execute():
     # print(data[1])
 
     for img_data in data[2:]:
+        print("loading. . .")
         lum_arr1 = lum_arr2
         lum_arr2 = rgb2luminanceArr(img_data)
         flag12 = flagPixels(lum_arr1, lum_arr2)
         (flag_hist, recent, imgOut) = sift(
-            flag_hist, recent, flag12, img_data, data[0])
+            flag_hist, recent, flag12, img_data)
         # print("DATA 0:")
         # print(data[0])
         # print(data[1])
@@ -159,29 +198,47 @@ def execute():
 
     # for fi in filtered_imgs:
     #     alt = fi.astype(np.uint8)
-    #     print(alt)
-    #     print("split")
-    #     print(alt.shape)
-    #     img = Image.fromarray(alt)
-    #     img.show()
+        # print("split")
+        # print(alt)
+        # print(alt.shape)
+        # img = Image.fromarray(alt)
+        # img.show()
 
+    print("done!")
+    animate_filtered(filtered_imgs)
+
+
+def animate_non(imgs):
+    frames = []  # for storing the generated images
     fig = plt.figure()
-    ani = animation.ArtistAnimation(
-        fig, filtered_imgs, interval=50, blit=True, repeat_delay=1000)
+    for i in imgs:
+        frames.append(
+            [plt.imshow(i, cmap=cm.Greys_r, animated=True)])
+
+    ani = animation.ArtistAnimation(fig, frames, interval=1, blit=True,
+                                    repeat_delay=1000)
+
+    # ani.save("test1non.gif", writer="me", fps=60)
+    ani.save('testnon.gif')
+    plt.axis('off')
+    # fig.set_size_inches(filtered_imgs[0].shape)
     plt.show()
 
-    imagelist = filtered_imgs
 
-    def redraw_fn(f, axes):
-        img = imagelist[f]
-        if not redraw_fn.initialized:
-            redraw_fn.im = axes.imshow(img, animated=True)
-            redraw_fn.initialized = True
-        else:
-            redraw_fn.im.set_array(img)
-    redraw_fn.initialized = False
+def animate_filtered(filtered_imgs):
+    frames = []  # for storing the generated images
+    fig = plt.figure()
+    for i in filtered_imgs:
+        frames.append(
+            [plt.imshow(i, cmap=cm.Greys_r, animated=True)])
 
-    videofig(len(imagelist), redraw_fn, play_fps=30)
+    ani = animation.ArtistAnimation(fig, frames, interval=1, blit=True,
+                                    repeat_delay=1000)
+
+    ani.save('testfilter.gif')
+    plt.axis('off')
+    # fig.set_size_inches(filtered_imgs[0].shape)
+    plt.show()
 
 
 execute()
