@@ -1,6 +1,10 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import matplotlib.animation as animation
 import sys
+from PIL import Image
+from videofig import videofig
 
 FRAME_CONST = 60
 
@@ -10,7 +14,7 @@ def rgb2luminance(rgbTup):
     # print(rgbTup)
     luminance = (0.2126*255*rgbTup[0] + 0.7152 * 255 * rgbTup[1] +
                  0.0722 * 255 * rgbTup[2])  # NTSC formula
-    val = 413.435*pow((0.002746*luminance+0.0189623), 22)
+    val = 413.435*pow((0.002746*luminance+0.0189623), 2.2)
 
     # print("RGB LUM")
     # print(val)
@@ -33,9 +37,9 @@ def rgb2luminanceArr(rgbArr):
 # l2 is pixel's current luminosity and l1 is pixel's previous luminosity in previous fram
 # returns 1 if change is very bright, -1 if change is too dark and 0 if no significant change
 def flagChange(l1, l2):
-    if ((l2-l1 > 0) and (l1 < 160)):
+    if ((l2-l1 > 20) and (l1 < 160)):
         return 1
-    elif (l1 - l2 > 0) and (l2 < 160):
+    elif (l1 - l2 > 20) and (l2 < 160):
         return -1
     return 0
 
@@ -60,6 +64,8 @@ def sift(flag_history, most_recent_flag, curr_flag, img, data0):
     img2 = img
     for i in range(most_recent_flag.shape[0]):
         for j in range(most_recent_flag.shape[1]):
+            # print("flag hist:")
+            # print(flag_history[i][j])
             # either 1 and -1 or -1 and 1
             if (curr_flag[i][j] * most_recent_flag[i][j] == -1):
                 # need to filter
@@ -110,11 +116,18 @@ def mini_data():
     i3 = np.full((3, 3, 3), (1., 1., 1.))
     black_img2 = np.full((3, 3, 3), (0., 0., 0.))
 
-    b_strip = i1.copy() * 3
-    alternate = i2.copy() * 2
-    b_strip2 = i1.copy() * 3
+    black = ()
 
-    return [b_strip, alternate, b_strip2]
+    b_strip = [i1.copy()] * 3
+    alternate = [i2.copy()] * 2
+    b_strip2 = [i1.copy()] * 3
+
+    return [np.full((3, 3, 3), (0., 0., 0.)), np.full((3, 3, 3), (0., 0., 0.)),
+            np.full((3, 3, 3), (0., 0., 0.)),
+            np.full((3, 3, 3), (1., 1., 1.)), np.full((3, 3, 3), (0., 0., 0.)),
+            np.full((3, 3, 3), (1., 1., 1.)), np.full((3, 3, 3), (0., 0., 0.)),
+            np.full((3, 3, 3), (0., 0., 0.)), np.full((3, 3, 3), (0., 0., 0.)),
+            np.full((3, 3, 3), (0., 0., 0.))]
 
 
 def execute():
@@ -122,7 +135,7 @@ def execute():
     # print(data)
     # sys.exit()
     filtered_imgs = [data[0], data[1]]
-    flag_hist = np.zeros(data[0].shape)
+    flag_hist = np.zeros((data[0].shape[0], data[0].shape[1]))
     lum_arr1 = rgb2luminanceArr(data[0])
     lum_arr2 = rgb2luminanceArr(data[1])
     flag12 = flagPixels(lum_arr1, lum_arr2)
@@ -144,8 +157,31 @@ def execute():
         # print("IMG OUT:")
         # print(imgOut)
 
-    for fi in filtered_imgs:
-        print(fi)
+    # for fi in filtered_imgs:
+    #     alt = fi.astype(np.uint8)
+    #     print(alt)
+    #     print("split")
+    #     print(alt.shape)
+    #     img = Image.fromarray(alt)
+    #     img.show()
+
+    fig = plt.figure()
+    ani = animation.ArtistAnimation(
+        fig, filtered_imgs, interval=50, blit=True, repeat_delay=1000)
+    plt.show()
+
+    imagelist = filtered_imgs
+
+    def redraw_fn(f, axes):
+        img = imagelist[f]
+        if not redraw_fn.initialized:
+            redraw_fn.im = axes.imshow(img, animated=True)
+            redraw_fn.initialized = True
+        else:
+            redraw_fn.im.set_array(img)
+    redraw_fn.initialized = False
+
+    videofig(len(imagelist), redraw_fn, play_fps=30)
 
 
 execute()
