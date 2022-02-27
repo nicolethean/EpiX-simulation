@@ -5,6 +5,7 @@ from matplotlib import animation
 import matplotlib.image as mpimg
 from PIL import Image
 
+
 # import imageio
 # images = []
 # for filename in filenames:
@@ -18,10 +19,14 @@ IMG_W = 4096
 IMG_H = 2160
 
 
+# def mini_data():
+#     return [get_pixels("color-black.png"), get_pixels("color-white.png"), get_pixels("color-black.png")]
+
+
 def data_set1():
     b_strip = [get_pixels("color-black.png")] * 10
     alternate = [get_pixels("color-black.png"),
-                 get_pixels("color-white.png")] * 1
+                 get_pixels("color-white.png")] * 2
     b_strip = [get_pixels("color-black.png")] * 10
     set = b_strip + alternate + b_strip
     return set
@@ -50,6 +55,7 @@ def make_gif():
     img_frames = []
     for f in pix_frames:
         frame_to_img(f)
+        print(f)
     frame_one = img_frames[0]
     frame_one.save("my_awesome.gif", format="GIF", append_images=img_frames,
                    save_all=True, duration=100, loop=0)
@@ -59,10 +65,8 @@ def frame_to_img(arr):
     im = Image.fromarray(arr)
 
 
-def execute():
-    make_gif()
+# def execute():
+#     for frame in mini_data():
+#         f1 = rgb2luminanceArr(frame)
 
-    # print(get_pixels("color-black.png"))
-
-
-execute()
+# execute()
