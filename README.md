@@ -1,5 +1,6 @@
 # hack-22
 Authors: 
+
 Nicole Thean  (nicole@thean.com)
 Jeff Zhou  (jffzhou@gmail.com)
 
@@ -10,6 +11,7 @@ Other Team Members:
 Priscilla Liu, Lisa Wang, Yashshree Shah
 
 //////////////////////////////////////////////////////////////////////////////
+
 Our Program:
 
 Transforms sequence of images to RGB tuple 2D arrays for frame-by-frame pixel analysis.
@@ -25,6 +27,7 @@ The sequence of inputed images are first animated without filtering.
 The filtered images are also animated after the program finishes.
 
 //////////////////////////////////////////////////////////////////////////////
+
 Usage:
 
 Data is currently read in the src folder. This can be changed based on image pathways. The data must be in sequential order of frames. To use demo data, move images from a test# folder in /data. 
