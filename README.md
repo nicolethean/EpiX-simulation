@@ -1,17 +1,13 @@
 # hack-22
 Authors: 
 
-Nicole Thean  (nicole@thean.com)
-
-Jeff Zhou  (jffzhou@gmail.com)
+Nicole Thean  (nicole@thean.com) & Jeff Zhou  (jffzhou@gmail.com)
 
 Health Hackathon 2022 Finalist
 
 Model for prototype for epilepsy-triggering events on desktop. 
 
-Other Team Members:
-
-Priscilla Liu, Lisa Wang, Yashshree Shah
+Other Team Members:  Priscilla Liu, Lisa Wang, & Yashshree Shah
 
 //////////////////////////////////////////////////////////////////////////////
 
