@@ -1,4 +1,4 @@
-# hack-22
+# EpiX Simulation
 Authors: 
 
 Nicole Thean  (nicole@thean.com) & Jeff Zhou  (jffzhou@gmail.com)
