@@ -5,7 +5,7 @@ Nicole Thean  (nicole@thean.com) & Jeff Zhou  (jffzhou@gmail.com)
 
 Health Hackathon 2022 Finalist
 
-Model for prototype for epilepsy-triggering events on desktop: EPix
+EpiX: A desktop app that filters out epileptic-triggering content in real-time. 
 
 Watch our product pitch here: https://www.youtube.com/watch?v=Dd50f-384Tk
 
@@ -15,11 +15,11 @@ Other Team Members:  Priscilla Liu, Lisa Wang, & Yashshree Shah
 
 Our Program:
 
+Simulation on EpiX: models how a computer screen changes in real time by taking in a series of images as an input. The sequence of images represent the frame-by-frame nature of taking in computer screen data. 
+
 Transforms sequence of images to RGB tuple 2D arrays for frame-by-frame pixel analysis.
 
-Implements luminosity difference as criteria for filtering. 
-
-Criteria taken from https://www.researchgate.net/publication/282936402_Automatic_detection_of_flashing_video_content 
+Implements luminosity difference as criteria for filtering. Criteria taken from https://www.researchgate.net/publication/282936402_Automatic_detection_of_flashing_video_content 
 
 Filtering is defined by changing a "flashing" pixel to solid color, i.e. grey. 
 
