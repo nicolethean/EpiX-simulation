@@ -5,7 +5,9 @@ Nicole Thean  (nicole@thean.com) & Jeff Zhou  (jffzhou@gmail.com)
 
 Health Hackathon 2022 Finalist
 
-Model for prototype for epilepsy-triggering events on desktop. 
+Model for prototype for epilepsy-triggering events on desktop: EPix
+
+Watch our product pitch here: https://www.youtube.com/watch?v=Dd50f-384Tk
 
 Other Team Members:  Priscilla Liu, Lisa Wang, & Yashshree Shah
 
